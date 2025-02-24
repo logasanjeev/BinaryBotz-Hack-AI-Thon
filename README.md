@@ -14,13 +14,13 @@ BinaryBotz-HackAiThon/
 │   │   ├── Voter Id/             
 │   ├── Encryption/          
 │   ├── Handwritten Extraction           
-│   ├── Models/
-|   |   └── Drive url for models
 │   └── NLP/        
 ├── Ensemble Model/                   
 │   ├── sample data/                  
 │   │   ├── sample data workspace    
 │   │   ├── Testing.ipynb   # GNN hyperparameters
+├── Models/
+|   |   └── Drive url for models
 ├── requirements.txt          # Dependencies
 └── README.md                 # Project documentation
 ```
