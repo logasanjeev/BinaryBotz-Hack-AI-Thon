@@ -3,7 +3,7 @@
 ## Project Structure
 
 ```
-Hack-AI-Thon-SBILife-BinaryBotz/
+BinaryBotz-HackAiThon/
 ├── Complete Document Validation/                   
 │   ├── Document Verfication/                 
 │   │   ├── Aadhar Card/          
