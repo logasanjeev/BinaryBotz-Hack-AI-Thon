@@ -21,6 +21,7 @@ BinaryBotz-HackAiThon/
 │   │   ├── Testing.ipynb   # GNN hyperparameters
 ├── Models/
 |   |   └── Drive url for models
+├── Web Portal/ 
 ├── requirements.txt          # Dependencies
 └── README.md                 # Project documentation
 ```
