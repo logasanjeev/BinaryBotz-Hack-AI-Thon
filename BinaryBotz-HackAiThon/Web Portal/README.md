@@ -1,32 +1,38 @@
-SBI ID Validation Web App
+**SBI ID Validation Web App**
 
 This is a Next.js web application designed to validate Indian ID proofs using a YOLO V11 model built with PyTorch. The application integrates Firebase for authentication and FastAPI for backend communication.
 
-Features
 
-ID Proof Validation: Uses a YOLO-based id_classifier model to verify the authenticity of uploaded ID proofs.
 
-Multi-Role Authentication: Users are categorized into three roles: Agent (Top), Middle Guys, and Clients.
+**Features**
 
-Secure Authentication: Utilizes Firebase Authentication with email and password.
+**ID Proof Validation:** Uses a YOLO-based id_classifier model to verify the authenticity of uploaded ID proofs.
 
-FastAPI Integration: Connects to a FastAPI server to process ID validation.
+**AI Result Reasoning:** Uses NLP model to justify the AI result to the cross validator
 
-File Upload: Uses multer for handling file uploads in Next.js.
+**Multi-Role Authentication:** Users are categorized into three roles: Agent (Top), Middle Guys, and Clients.
 
-Frontend Styling: Built with Tailwind CSS for a responsive and modern UI.
+**Secure Authentication:** Utilizes Firebase Authentication with email and password.
 
-Tech Stack
+**FastAPI Integration:** Connects to a FastAPI server to process ID validation.
 
-Frontend: Next.js, Tailwind CSS
+**File Upload:** Uses multer for handling file uploads in Next.js.
 
-Backend: FastAPI (Python)
+**Frontend Styling:** Built with Tailwind CSS for a responsive and modern UI.
 
-Database & Auth: Firebase, Supabase
 
-Machine Learning: PyTorch (YOLO V11 Model)
 
-Dependencies
+**Tech Stack:**
+
+**Frontend:** Next.js, Tailwind CSS
+
+**Backend:** FastAPI (Python)
+
+**Database & Auth:** Firebase
+
+**Machine Learning:** PyTorch 
+
+**Dependencies**
 
 @pytorch/torch
 
@@ -36,7 +42,7 @@ tf-node
 
 sharp
 
-Installation
+**Installation**
 
 Prerequisites
 
@@ -69,20 +75,20 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 NEXT_PUBLIC_FASTAPI_URL=http://127.0.0.1:8000
 
-Running the Application
+**Running the Application**
 
-Start the FastAPI Server
+Start the FastAPI Server:
 
 cd backend
 uvicorn main:app --reload
 
-Start the Next.js App
+Start the Next.js App:
 
 npm run dev
 
 The app will be available at http://localhost:3000.
 
-Usage
+**Usage**
 
 Sign in or Register using Firebase authentication.
 
@@ -102,19 +108,18 @@ Folder Structure
 │   ├── pages/         # Next.js pages
 │   ├── styles/        # Tailwind styles
 │   ├── utils/         # Utility functions
-│   ├── firebase.js    # Firebase config
+│   ├── lib/           # Firebase config
 ├── public/            # Static assets
 ├── .env.local         # Environment variables
 ├── package.json       # Frontend dependencies
 ├── README.md          # Project documentation
 
-Deployment
+**Deployment**
 
 Frontend: Can be deployed on Vercel or Firebase Hosting.
-
 Backend: Can be hosted on Google Cloud Run, Heroku, or AWS EC2.
 
-Future Improvements
+**Future Improvements**
 
 Add real-time status updates for validation.
 
