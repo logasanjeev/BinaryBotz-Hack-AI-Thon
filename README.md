@@ -16,9 +16,6 @@ BinaryBotz-HackAiThon/
 │   ├── Handwritten Extraction           
 │   └── NLP/        
 ├── Ensemble Model/                   
-│   ├── sample data/                  
-│   │   ├── sample data workspace    
-│   │   ├── Testing.ipynb   # GNN hyperparameters
 ├── Models/
 |   |   └── Drive url for models
 ├── Web Portal/ 
