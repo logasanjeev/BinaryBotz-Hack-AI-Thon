@@ -98,21 +98,25 @@ The system will validate the ID using YOLO V11 via FastAPI.
 
 If valid, the ID proof is processed further; otherwise, rejection feedback is provided.
 
-Folder Structure
+# Project Structure
 
-├── backend/           # FastAPI server
-│   ├── main.py        # API entry point
-│   ├── model/         # YOLO V11 ID classifier
-├── src/               # Next.js frontend
-│   ├── components/    # UI components
-│   ├── pages/         # Next.js pages
-│   ├── styles/        # Tailwind styles
-│   ├── utils/         # Utility functions
-│   ├── lib/           # Firebase config
-├── public/            # Static assets
-├── .env.local         # Environment variables
-├── package.json       # Frontend dependencies
-├── README.md          # Project documentation
+```bash
+backend/           # FastAPI server
+├── main.py        # API entry point
+├── model/         # YOLO V11 ID classifier
+
+src/               # Next.js frontend
+├── components/    # UI components
+├── pages/         # Next.js pages
+├── styles/        # Tailwind styles
+├── utils/         # Utility functions
+├── lib/           # Firebase config
+
+public/            # Static assets
+.env.local         # Environment variables
+package.json       # Frontend dependencies
+README.md          # Project documentation
+```
 
 **Deployment**
 
