@@ -1,4 +1,4 @@
-# Fraud Claim Prediction - GNN + XGBoost
+# Fraud Claim Prediction - OCR + NLP + GNN + XGBoost
 
 ## Project Structure
 
