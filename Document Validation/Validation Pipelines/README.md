@@ -97,28 +97,48 @@ The Data Validation workflow queries a Neon PostgreSQL database to store and com
 - **Sample Output**:
   ```json
   [
-  {
-    "output": {
-      "full_name": "BADARAVADA RAVI KIRAN",
-      "gender": "Male",
-      "death_date": "30-JAN-2021",
-      "death_location": "KRISHNA INSTITUTE OF MEDICAL SCIENCES",
-      "parent_father": "KRISHNAM RAJU",
-      "parent_mother": "LOKESHWARI",
-      "residence_address": "Hno 4-87, Dandiganapudi Village, Nandiwada Mandal, Krishna, Andhra Pradesh-521327",
-      "authority_issuer": "Greater Hyderabad Municipal Corporation",
-      "region_state": "Telangana State",
-      "region_district": "Krishna",
-      "registration_number": "1054",
-      "registration_date": "12-FEB-2021",
-      "certificate_number": "202118001211",
-      "certification_date": "15-FEB-2021",
-      "certified_by": "Dr. D. Ravinder Goud",
-      "certifier_title": "AMOH"
+    {
+      "output": {
+        "full_name": "BADARAVADA RAVI KIRAN",
+        "gender": "Male",
+        "death_date": "30-JAN-2021",
+        "death_location": "KRISHNA INSTITUTE OF MEDICAL SCIENCES",
+        "parent_father": "KRISHNAM RAJU",
+        "parent_mother": "LOKESHWARI",
+        "residence_address": "Hno 4-87, Dandiganapudi Village, Nandiwada Mandal, Krishna, Andhra Pradesh-521327",
+        "authority_issuer": "Greater Hyderabad Municipal Corporation",
+        "region_state": "Telangana State",
+        "region_district": "Krishna",
+        "registration_number": "1054",
+        "registration_date": "12-FEB-2021",
+        "certificate_number": "202118001211",
+        "certification_date": "15-FEB-2021",
+        "certified_by": "Dr. D. Ravinder Goud",
+        "certifier_title": "AMOH"
+      }
     }
-  }
-]
+  ]
   ```
+
+  
+- **Sample Input**:
+  ```bash
+  curl -X POST http://localhost:5678/post-input -F "file=@samples/post_mortem.jpg" -F "doc_type=post_mortem"
+  ```
+  ![Sample Post Mortem Report Image](samples/post_mortem.jpg)
+- **Sample Output**:
+  ```json
+  [
+    {
+      "output": {
+        "autopsy_date": "9/8/21",
+        "authority_issuer": "R. G. KAR MEDICAL COLLEGE & HOSPITAL, KOLKATA-700 004",
+        "report_date": "9/8/21"
+      }
+    }
+  ]
+  ```
+  
 - **Role in Fraud Detection**: Provides structured data from non-ID documents, which is compared with ID data (from the `ID Extraction` folder) to identify inconsistencies (e.g., mismatched names or genders).
 
 ### Data Validation Workflow (`Information_Validation.json`)
