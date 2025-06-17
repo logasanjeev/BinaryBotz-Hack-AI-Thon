@@ -1,0 +1,267 @@
+{
+  "name": "Information Validation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "=demo-api/:claim_id",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        -100
+      ],
+      "id": "1c6b5160-5918-48b5-8728-6c3e26521a84",
+      "name": "Webhook",
+      "webhookId": "e34b9f68-f875-42f5-b04f-05b666f60cf5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        820,
+        -120
+      ],
+      "id": "b70663c2-60ea-48bc-b34b-27d807831b73",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "claims",
+          "mode": "list",
+          "cachedResultName": "claims"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "claim_id",
+              "value": "={{ $json.params.claim_id }}"
+            }
+          ]
+        },
+        "options": {
+          "outputColumns": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -400,
+        -100
+      ],
+      "id": "fd89eec2-8a4d-4f19-a2f7-b490682f9a69",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "njc1vF8SHMuqRX0g",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function formatDetails(data, prefix, sectionTitle) {\n  const fields = Object.keys(data)\n    .filter(key => key.startsWith(prefix))\n    .map(key => {\n      const value = data[key] === null ? 'null' : data[key];\n      return `${key}: ${value}`;\n    });\n  return fields.length > 0 ? `${sectionTitle}:\\n${fields.join('\\n')}` : `${sectionTitle}:\\n(No data available)`;\n}\n\nconst inputData = $json;\nlet outputString = ``;\n\nconst sections = [\n  { prefix: 'aadhaar_', title: 'Aadhaar Details' },\n  { prefix: 'voter_', title: 'Voter Id Details' },\n  { prefix: 'pan_', title: 'Pan Card Details' },\n  { prefix: 'driving_licese_', title: 'Driving License Details' },\n  { prefix: 'passport_', title: 'Passport Details' },\n  { prefix: 'claim_form_', title: 'Claim Form Details' },\n  { prefix: 'postmortem_', title: 'Post Mortem Details' },\n  { prefix: 'death_certificate_', title: 'Death Certificate Details' },\n  { prefix: 'mac_', title: 'Medical Attendant Certificate Details' },\n  { prefix: 'insured_', title: 'Insured Details' }\n];\n\nsections.forEach(section => {\n  outputString += formatDetails(inputData, section.prefix, section.title) + '\\n\\n';\n});\n\nreturn [{ json: { formatted_output: outputString.trim() } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        -100
+      ],
+      "id": "b54b08f5-1382-42bc-aa0b-380066578e3d",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2e408dc-a456-4237-9968-db2f4e261576",
+              "name": "input_data",
+              "value": "={{ $json }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -180,
+        -100
+      ],
+      "id": "6779f6d5-3ad4-4f65-86cd-9ab7e28593a7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json.input_data;\nconst filtered = {\n  aadhaar_full_name: input.aadhaar_full_name,\n  aadhaar_date_of_birth: input.aadhaar_date_of_birth,\n  aadhaar_gender: input.aadhaar_gender,\n  aadhaar_address: input.aadhaar_address,\n  voter_full_name: input.voter_full_name,\n  voter_date_of_birth: input.voter_date_of_birth,\n  voter_gender: input.voter_gender,\n  voter_address: input.voter_address,\n  pan_full_name: input.pan_full_name,\n  pan_date_of_birth: input.pan_date_of_birth,\n  pan_gender: input.pan_gender,\n  pan_address: input.pan_address,\n  driving_licese_full_name: input.driving_licese_full_name,\n  driving_licese_date_of_birth: input.driving_licese_date_of_birth,\n  driving_licese_gender: input.driving_licese_gender,\n  driving_licese_address: input.driving_licese_address,\n  passport_full_name: input.passport_full_name,\n  passport_date_of_birth: input.passport_date_of_birth,\n  passport_gender: input.passport_gender,\n  passport_address: input.passport_address,\n  claim_form_name: input.claim_form_name,\n  claim_form_father_spouse_name: input.claim_form_father_spouse_name,\n  claim_form_claimant_name: input.claim_form_claimant_name,\n  claim_form_relation_with_la: input.claim_form_relation_with_la,\n  postmortem_full_name: input.postmortem_full_name,\n  postmortem_gender: input.postmortem_gender,\n  postmortem_residence_address: input.postmortem_residence_address,\n  postmortem_occupation: input.postmortem_occupation,\n  postmortem_identification_method: input.postmortem_identification_method,\n  postmortem_identified_by: input.postmortem_identified_by,\n  death_certificate_full_name: input.death_certificate_full_name,\n  death_certificate_date_of_birth: input.death_certificate_date_of_birth,\n  death_certificate_gender: input.death_certificate_gender,\n  death_certificate_residence_address: input.death_certificate_residence_address,\n  death_certificate_occupation: input.death_certificate_occupation,\n  death_certificate_spouse_name: input.death_certificate_spouse_name,\n  death_certificate_marital_status: input.death_certificate_marital_status,\n  death_certificate_parent_father: input.death_certificate_parent_father,\n  death_certificate_parent_mother: input.death_certificate_parent_mother,\n  mac_life_assured_name: input.mac_life_assured_name,\n  mac_date_of_birth: input.mac_date_of_birth,\n  mac_address: input.mac_address,\n  insured_occupation: input.insured_occupation\n};\nreturn [{ json : filtered }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -100
+      ],
+      "id": "beb4a407-b29e-4f70-8a32-620c13c632a9",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "text": "=Aadhaar Details: aadhaar_full_name: John K Doe aadhaar_date_of_birth: 1980-05-14T12:00:00.000Z aadhaar_gender: M aadhaar_address: 123 Main St, Delhi\n\nVoter Id Details: voter_full_name: John Kumar Doe voter_date_of_birth: 1980-05-14 voter_gender: Male voter_address: 123 Main Street, Delhi\n\nPan Card Details: pan_full_name: John K. Doe pan_date_of_birth: 1980-05-15 pan_gender: M pan_address: 124 Main St, Delhi\n\nDriving License Details: driving_licese_full_name: John K Doe driving_licese_date_of_birth: 1980-05-14T12:00:00.000Z driving_licese_gender: F driving_licese_address: 123 Main St, Delhi\n\nPassport Details: passport_full_name: John Kumar Doe passport_date_of_birth: 1980-05-16 passport_gender: Male passport_address: 123 Main St, New Delhi\n\nClaim Form Details: claim_form_name: John K. Doe claim_form_father_spouse_name: Mary Jane Doe claim_form_claimant_name: Mary Jane Doe claim_form_relation_with_la: Self\n\nPost Mortem Details: postmortem_full_name: John K Doe postmortem_gender: Male postmortem_residence_address: 123 Main St, Delhi postmortem_occupation: Engineer postmortem_identification_method: Voter postmortem_identified_by: Mary J. Doe\n\nDeath Certificate Details: death_certificate_full_name: John K. Doe death_certificate_date_of_birth: 1980-05-20 death_certificate_gender: Female death_certificate_residence_address: 123 Main St, Delhi death_certificate_occupation: Engineer death_certificate_spouse_name: Mary J Doe death_certificate_marital_status: Married death_certificate_parent_father: Michael John Doe death_certificate_parent_mother: Sarah Jane Doe\n\nMedical Attendant Certificate Details: mac_life_assured_name: John Kumar Doe mac_date_of_birth: 1980-05-15 mac_address: 123 Main St, Delhi\n\nInsured Details: insured_occupation: Engineer\n\n\nDynamically process ALL documents in the input (e.g., aadhaar, voter, pan, driving_licese, passport, claim_form, postmortem, death_certificate, mac, insured, or any others). Generate ALL possible document pairs (e.g., aadhaar vs voter, aadhaar vs pan, voter vs pan, etc.), including pairs with new, missing, or null documents. For each pair:\n\n\n\n\n\nFields to Compare:\n\n\n\n\n\nCompare *_full_name, *_date_of_birth, *_gender if both fields exist and are non-null/non-empty.\n\n\n\nUse exact field names from input (e.g., mac_life_assured_name for mac’s name).\n\n\n\nSkip comparison if either field is null, empty, or missing, but include the pair with [] if no inconsistencies.\n\n\n\nNormalization:\n\n\n\n\n\nDates: Convert to YYYY-MM-DD. Treat as equal if same day (e.g., ‘1980-05-14’=’1980-05-14T12:00:00.000Z’=’05/14/1980’=’14-05-1980’). Skip if formats are invalid or identical after normalization. Output as YYYY-MM-DD.\n\n\n\nGender: Normalize to ‘Male’ or ‘Female’. Map ‘M’, ‘m’, ‘Male’, ‘male’ to ‘Male’; ‘F’, ‘f’, ‘Female’, ‘female’ to ‘Female’. Skip if normalized values are identical or invalid. Output as ‘Male’ or ‘Female’.\n\n\n\nNames: Trim whitespace, compare EXACTLY including punctuation (e.g., ‘John K Doe’ vs ‘John K. Doe’ is different). Skip if identical after trimming. Output in title case (e.g., ‘John K Doe’).\n\n\n\nSkip null, empty, or invalid fields.\n\n\n\nOutput Schema:\n\n\n\n\n\nMUST follow: inconsistencies.<document>: [{category: string, fields: string[], values: string[], description: string}].\n\n\n\nCategories: ‘Full names’, ‘Dates of Birth’, ‘Gender’, ‘Identification method’, ‘Marital Status’.\n\n\n\nUse [] for empty inconsistencies, never {} or description: \"\".\n\n\n\nSkip entries for identical values (e.g., ‘John K. Doe’ vs ‘John K. Doe’, ‘Female’ vs ‘Female’); do not output any entry, including description: [] or description: \"\".\n\n\n\nOutput normalized values in values (e.g., ‘Male’, ‘1980-05-14’, ‘John K Doe’).\n\n\n\nEdge Cases:\n\n\n\n\n\nPostmortem Identification:\n\n\n\n\n\nIf postmortem_identification_method exists and equals ‘Voter’, and both voter_gender and death_certificate_gender exist, compare them.\n\n\n\nOutput EXACTLY:\n\n\n\n\n\npostmortem.inconsistencies.death_certificate: [{category: ‘Identification method’, fields: [‘voter_gender’, ‘death_certificate_gender’], values: [<normalized_voter_gender>, <normalized_death_certificate_gender>], description: ‘Identification method differs’}]\n\n\n\ndeath_certificate.inconsistencies.postmortem: [{category: ‘Identification method’, fields: [‘death_certificate_gender’, ‘voter_gender’], values: [<normalized_death_certificate_gender>, <normalized_voter_gender>], description: ‘Identification method differs’}]\n\n\n\nSkip if method is not ‘Voter’ or fields are missing/null.\n\n\n\nMarital Status:\n\n\n\n\n\nIf both claim_form_relation_with_la and death_certificate_marital_status exist and are non-null, compare them.\n\n\n\nIf claim_form_relation_with_la is ‘Self’ and death_certificate_marital_status is ‘Married’, output EXACTLY:\n\n\n\n\n\nclaim_form.inconsistencies.death_certificate: [{category: ‘Marital Status’, fields: [‘claim_form_relation_with_la’, ‘death_certificate_marital_status’], values: [‘Self’, ‘Married’], description: ‘Marital Status contradicts’}]\n\n\n\ndeath_certificate.inconsistencies.claim_form: [{category: ‘Marital Status’, fields: [‘death_certificate_marital_status’, ‘claim_form_relation_with_la’], values: [‘Married’, ‘Self’], description: ‘Marital Status contradicts’}]\n\n\n\nSkip if either field is missing/null or values don’t match this case.\n\n\n\nRules:\n\n\n\n\n\nInclude ALL pairs, even if empty (e.g., aadhaar vs insured outputs [] if no inconsistencies).\n\n\n\nEnsure symmetric pairs (e.g., aadhaar.inconsistencies.voter and voter.inconsistencies.aadhaar).\n\n\n\nSkip address fields, spouse/parent details, and non-relevant fields.\n\n\n\nHandle missing documents (e.g., no insured) by outputting empty [] for their pairs.\n\n\n\nOutput inconsistencies separately per category (e.g., separate entries for ‘Full names’ and ‘Dates of Birth’).\n\n\n\nExplicitly compare: aadhaar vs voter, aadhaar vs pan, voter vs driving_licese, driving_licese vs passport, death_certificate vs all, etc., for *_full_name, *_date_of_birth, *_gender if present.\n\n\n\nIf new document types appear, compare their *_full_name, *_date_of_birth, *_gender if present.\n\n\n\nError Handling:\n\n\n\n\n\nIf input is malformed, output empty inconsistencies ([]) for missing documents.\n\n\n\nLog invalid fields (e.g., unparseable dates) as empty [] for that pair.\n\n\n\nPrioritize critical pairs (e.g., death_certificate, postmortem, claim_form) if token limits are reached.\n\nOutput ALL pairs in the schema, ensuring completeness, exact comparisons, and robustness for any input, including missing fields, varied formats, or new documents.",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"aadhaar\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"voter\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"pan\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"driving_licese\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"passport\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"claim_form\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"postmortem\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"death_certificate\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"mac\": { \"$ref\": \"#/definitions/inconsistencies\" },\n    \"insured\": { \"$ref\": \"#/definitions/inconsistencies\" }\n  },\n  \"required\": [\n    \"aadhaar\",\n    \"voter\",\n    \"pan\",\n    \"driving_licese\",\n    \"passport\",\n    \"claim_form\",\n    \"postmortem\",\n    \"death_certificate\",\n    \"mac\",\n    \"insured\"\n  ],\n  \"definitions\": {\n    \"inconsistencies\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"inconsistencies\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"aadhaar\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"voter\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"pan\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"driving_licese\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"passport\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"claim_form\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"postmortem\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"death_certificate\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"mac\": { \"$ref\": \"#/definitions/inconsistency_array\" },\n            \"insured\": { \"$ref\": \"#/definitions/inconsistency_array\" }\n          },\n          \"required\": [\n            \"aadhaar\",\n            \"voter\",\n            \"pan\",\n            \"driving_licese\",\n            \"passport\",\n            \"claim_form\",\n            \"postmortem\",\n            \"death_certificate\",\n            \"mac\",\n            \"insured\"\n          ]\n        }\n      },\n      \"required\": [\"inconsistencies\"]\n    },\n    \"inconsistency_array\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"category\": { \"type\": \"string\" },\n          \"fields\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" },\n            \"minItems\": 2,\n            \"maxItems\": 2\n          },\n          \"values\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" },\n            \"minItems\": 2,\n            \"maxItems\": 2\n          },\n          \"description\": { \"type\": \"string\" }\n        },\n        \"required\": [\"category\", \"fields\", \"values\", \"description\"]\n      }\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -100
+      ],
+      "id": "b45e428b-b4cc-4605-abd7-b0236e372907",
+      "name": "Information Extractor1"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-r1:14b-qwen-distill-q4_K_M",
+        "options": {
+          "keepAlive": "0",
+          "numCtx": 100000,
+          "numPredict": 4500,
+          "useMLock": true,
+          "useMMap": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmOllama",
+      "typeVersion": 1,
+      "position": [
+        360,
+        80
+      ],
+      "id": "d84f2735-1255-4847-b212-4a8b0cbb916d",
+      "name": "Ollama Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "dqxXNIxOVO2jjWdj",
+          "name": "Ollama account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3434d725-6664-430b-baf3-13045f7a0fe3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a55d14e2824e9cad12b17599633dfd15bb15090e9dab8d3e5c0f5afebe149601"
+  },
+  "id": "KicbJwoDOr57ucce",
+  "tags": []
+}
