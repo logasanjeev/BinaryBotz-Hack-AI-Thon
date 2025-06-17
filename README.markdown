@@ -98,5 +98,4 @@ The components work together as follows:
 
 ## Contact
 For issues or questions, please contact the BinaryBotz-Hack-AI-Thon team:
-- Email: support@binarybotz.com
 - GitHub: [BinaryBotz-Hack-AI-Thon](https://github.com/binarybotz/hack-ai-thon)
