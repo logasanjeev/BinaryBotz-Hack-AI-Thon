@@ -91,16 +91,33 @@ The Data Validation workflow queries a Neon PostgreSQL database to store and com
 
 - **Sample Input**:
   ```bash
-  curl -X POST http://localhost:5678/post-input -F "file=@samples/death_certificate.jpg" -F "doc_type=death_certificate"
+  curl -X POST http://localhost:5678/post-input -F "file=@samples/Death Certificate Test.jpg" -F "doc_type=death_certificate"
   ```
+  ![Sample Death Certificate Image](samples/"Death Certificate Test.jpg")
 - **Sample Output**:
   ```json
+  [
   {
-    "full_name": "John K Doe",
-    "death_date": "2023-01-15",
-    "gender": "Male",
-    "cause_of_death": "Cardiac Arrest"
+    "output": {
+      "full_name": "BADARAVADA RAVI KIRAN",
+      "gender": "Male",
+      "death_date": "30-JAN-2021",
+      "death_location": "KRISHNA INSTITUTE OF MEDICAL SCIENCES",
+      "parent_father": "KRISHNAM RAJU",
+      "parent_mother": "LOKESHWARI",
+      "residence_address": "Hno 4-87, Dandiganapudi Village, Nandiwada Mandal, Krishna, Andhra Pradesh-521327",
+      "authority_issuer": "Greater Hyderabad Municipal Corporation",
+      "region_state": "Telangana State",
+      "region_district": "Krishna",
+      "registration_number": "1054",
+      "registration_date": "12-FEB-2021",
+      "certificate_number": "202118001211",
+      "certification_date": "15-FEB-2021",
+      "certified_by": "Dr. D. Ravinder Goud",
+      "certifier_title": "AMOH"
+    }
   }
+]
   ```
 - **Role in Fraud Detection**: Provides structured data from non-ID documents, which is compared with ID data (from the `ID Extraction` folder) to identify inconsistencies (e.g., mismatched names or genders).
 
