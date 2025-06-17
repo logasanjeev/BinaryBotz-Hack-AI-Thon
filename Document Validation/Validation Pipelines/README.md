@@ -91,9 +91,9 @@ The Data Validation workflow queries a Neon PostgreSQL database to store and com
 
 - **Sample Input**:
   ```bash
-  curl -X POST http://localhost:5678/post-input -F "file=@samples/Death Certificate Test.jpg" -F "doc_type=death_certificate"
+  curl -X POST http://localhost:5678/post-input -F "file=@samples/death_certificate.jpg" -F "doc_type=death_certificate"
   ```
-  ![Sample Death Certificate Image](samples/"Death Certificate Test.jpg")
+  ![Sample Death Certificate Image](samples/death_certificate.jpg)
 - **Sample Output**:
   ```json
   [
